@@ -145,13 +145,13 @@ let json = XLSX.utils.sheet_to_json(sheet);
 json.forEach(row => {
 
 data[row["Candidate ID"]] = {
-    Name: row👏["Candidate Name"],
-    Your system no: row["System Number"],
-    Lab: row["Lab"],
-    Floor: row["Floor"],
-    Block: row["Block"],
-    Program: row["Program Name"],
-    Subprogram: row["Sub Program"]
+    name: row["Candidate Name"],
+    system: row["System Number"],
+    lab: row["Lab"],
+    floor: row["Floor"],
+    block: row["Block"],
+    program: row["Program Name"],
+    subprogram: row["Sub Program"]
 };
 
 });
