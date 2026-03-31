@@ -21,12 +21,12 @@ flex-direction:column;
 /* Header */
 .header{
 background: linear-gradient(90deg, #020617, #1e3a8a);
-padding:25px;
+padding:10px 25px 25px 25px;
 box-shadow:0 4px 15px rgba(0,0,0,0.5);
 }
 
-.header h1{
-margin:5px;
+.header h2{
+margin-top:0;
 }
 
 .header p{
@@ -100,11 +100,16 @@ color:#94a3b8;
     margin: 4px 0;
 }
 
+.main-content{
+flex:1;
+}
 </style>
 
 </head>
 
 <body>
+
+<div class="main-content">
 
 <div class="header">
 <h2>BITS EXAMINATION</h2>
@@ -123,10 +128,13 @@ color:#94a3b8;
 
 </div>
 
-<!-- Footer Line -->
+</div> <!-- ✅ THIS IS THE IMPORTANT ADD -->
+
 <div class="footer">
 DEVELOPED BY DYNAMIC SUDARSAN
 </div>
+
+</body>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
