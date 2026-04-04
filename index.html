@@ -119,6 +119,14 @@ color:#cbd5f5;
 .main-content{
 flex:1;
 }
+
+/* Error */
+.error{
+  color:#ef4444;
+  font-weight:bold;
+}
+
+  
 </style>
 
 </head>
@@ -182,7 +190,7 @@ data[row["Candidate ID"]] = {
 
 })
 .catch(() => {
-document.getElementById("result").innerHTML = "___❌ Error loading Excel file____";
+document.getElementById("result").innerHTML = "___❌ Error loading Excel file...!";
 });
 
 function search(){
@@ -198,7 +206,8 @@ let s = data[id];
 
 if(!s){
 document.getElementById("result").innerHTML =
-"❌ Student not found! Please recheck your BITS ID and re-enter. <br><br>👉 If not found! Contact help desk : 4th Floor,A-WING,Lab 401.";
+`<p class="error">❌ Student not found! Please recheck your BITS ID and Enter.</p> 
+<p>👉 If not found! Contact help desk : 4th Floor,A-WING,Lab 401.</P>`;
 return;
 }
 
