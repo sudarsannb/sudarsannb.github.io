@@ -126,6 +126,15 @@ flex:1;
   font-weight:bold;
 }
 
+.lebel{
+color:#2563eb;  /* blue */
+font-weight:600;
+}
+
+.value{
+font-weight:bold;
+color:black;
+}
   
 </style>
 
@@ -215,12 +224,12 @@ document.getElementById("result").innerHTML = `
 
 <h2>${s.name}</h2>
 
-<p><b>System:</b> ${s.system}</p>
-<p><b>Lab:</b> ${s.lab}</p>
-<p><b>Floor:</b> ${s.floor}</p>
-<p><b>Block:</b> ${s.block}</p>
-<p><b>Program:</b> ${s.program}</p>
-<p><b>Sub Program:</b> ${s.subprogram}</p>
+<p><span class="lebel">System:</span> <span class="value">${s.system}</span></p>
+<p><span class="lebel">Lab:</span> <span class="value">${s.lab}</span></p>
+<p><span class="lebel">Floor:</span> <span class="value">${s.floor}</span></p>
+<p><span class="lebel">Block:</span> <span class="value">${s.block}</span></p>
+<p><span class="lebel">Program:</span> <span class="value">${s.program}</span></p>
+<p><span class="lebel">Sub Program:</span> <span class="value">${s.subprogram}</span></p>
 
 <div class="highlight">
 📍 Report to <b>${s.floor}</b> Floor, <b>${s.block}</b>, Lab <b>${s.lab}</b>, System <b>${s.system}</b>.
