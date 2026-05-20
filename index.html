@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <title>Seating Portal</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
 
 body{
-font-family:Arial;
-background: linear-gradient(135deg, #020617, #1e3a8a, #0f172a);
+font-family:Arial,sans-serif;
+background:linear-gradient(135deg,#020617,#1e3a8a,#0f172a);
 color:white;
 text-align:center;
 margin:0;
@@ -19,45 +18,52 @@ flex-direction:column;
 }
 
 /* Header */
+
 .header{
-background: linear-gradient(90deg, #020617, #1e3a8a);
-padding:10px 25px 25px 25px;
-box-shadow:0 4px 15px rgba(0,0,0,0.5);
+background:linear-gradient(90deg,#020617,#1e3a8a);
+padding:10px 25px 25px;
+box-shadow:0 4px 15px rgba(0,0,0,.5);
+}
+
+.header h2,
+.header h3,
+.header h4{
+margin:4px 0;
 }
 
 .header h2{
-  color:#ffffff;  
+color:#ffffff;
 }
 
 .header h3{
-  color:#facc15;
+color:#facc15;
 }
 
 .header h4{
-  color:#86efac; 
+color:#86efac;
 }
 
-.header p{
-  margin:0;
-  color:#cbd5f5
-}
+/* Main content */
 
-.header h2{
-margin-top:0;
+.main-content{
+flex:1;
 }
 
 /* Card */
+
 .card{
-background: rgba(255,255,255,0.95);
+background:rgba(255,255,255,.95);
 color:black;
 padding:20px;
 border-radius:15px;
 max-width:420px;
+width:90%;
 margin:40px auto;
-box-shadow:0 10px 30px rgba(0,0,0,0.4);
+box-shadow:0 10px 30px rgba(0,0,0,.4);
 }
 
 /* Input */
+
 input{
 padding:12px;
 width:70%;
@@ -67,6 +73,7 @@ text-transform:uppercase;
 }
 
 /* Button */
+
 button{
 padding:12px 20px;
 background:#22c55e;
@@ -81,6 +88,7 @@ background:#16a34a;
 }
 
 /* Result */
+
 .result{
 text-align:left;
 margin-top:20px;
@@ -90,40 +98,8 @@ margin-top:20px;
 margin:6px 0;
 }
 
-.highlight{
-background:#ecfdf5;
-padding:10px;
-border-radius:8px;
-margin-top:10px;
-}
-
-/* Footer */
-.footer{
-margin-top:auto;
-padding:10px;
-font-size:13px;
-color:#cbd5f5;
-}
-
-.header h1,
-.header h3,
-.header h4,
-.header p {
-    margin: 4px 0;
-}
-
-.main-content{
-flex:1;
-}
-
-/* Error */
-.error{
-  color:#ef4444;
-  font-weight:bold;
-}
-
-.lebel{
-color:#2563eb;  /* blue */
+.label{
+color:#2563eb;
 font-weight:600;
 }
 
@@ -131,9 +107,31 @@ font-weight:600;
 font-weight:bold;
 color:black;
 }
-  
-</style>
 
+.highlight{
+background:#ecfdf5;
+padding:10px;
+border-radius:8px;
+margin-top:10px;
+}
+
+/* Error */
+
+.error{
+color:#ef4444;
+font-weight:bold;
+}
+
+/* Footer */
+
+.footer{
+margin-top:auto;
+padding:10px;
+font-size:13px;
+color:#cbd5f5;
+}
+
+</style>
 </head>
 
 <body>
@@ -144,104 +142,160 @@ color:black;
 <h2>BITS EXAMINATION</h2>
 <h3>CANDIDATE SEATING ARRANGEMENT</h3>
 <h4>CENTRE : JAIN UNIVERSITY</h4>
-<p>CHECK YOUR SEATING DETAILS USING YOUR BITS-ID(EX: 2024TH12...)</p>
-<h4>Date: 10-04-2026 | SHIFT : FN</h4>
+<h4>Date: 23-05-2026 | SHIFT : FN (9:00 AM)</h4>
 </div>
 
 <div class="card">
 
-<input id="idInput" placeholder="ENTER CANDIDATE ID" autofocus>
+<input
+id="idInput"
+placeholder="ENTER FULL BITS ID"
+autofocus>
+
 <button onclick="search()">Search</button>
 
 <div id="result" class="result"></div>
 
 </div>
-
-</div> <!-- ✅ THIS IS THE IMPORTANT ADD -->
+</div>
 
 <div class="footer">
-DEVELOPED BY
-SUDARSAN  NB
+DEVELOPED BY SUDARSAN NB
 </div>
-  
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <script>
 
-let data = {};
+let data={};
 
 fetch("seating1.xlsx")
-.then(res => res.arrayBuffer())
-.then(fileData => {
+.then(res=>res.arrayBuffer())
+.then(fileData=>{
 
-let workbook = XLSX.read(fileData);
-let sheet = workbook.Sheets[workbook.SheetNames[0]];
-let json = XLSX.utils.sheet_to_json(sheet);
+let workbook=XLSX.read(fileData);
 
-json.forEach(row => {
+let sheet=
+workbook.Sheets[
+workbook.SheetNames[0]
+];
 
-data[row["Candidate ID"]] = {
-    name: row["Candidate Name"],
-    system: row["System Number"],
-    lab: row["Lab"],
-    floor: row["Floor"],
-    block: row["Block"],
-    program: row["Program Name"],
-    subprogram: row["Sub Program"]
+let json=
+XLSX.utils.sheet_to_json(sheet);
+
+json.forEach(row=>{
+
+if(!row["Candidate ID"]) return;
+
+let id=row["Candidate ID"]
+.toString()
+.trim()
+.toUpperCase();
+
+data[id]={
+
+name:row["Candidate Name"],
+system:row["System Number"],
+floor:row["Floor"],
+block:row["Block"],
+lab:row["Lab"],
+program:row["Program Name"]
+
 };
 
 });
 
 })
-.catch(() => {
-document.getElementById("result").innerHTML = "___❌ Error loading Excel file...!";
+
+.catch(()=>{
+
+document.getElementById("result").innerHTML=
+`<p class="error">❌ Error loading Excel file!</p>`;
+
 });
 
 function search(){
 
-if(Object.keys(data).length === 0){
-document.getElementById("result").innerHTML="⏳ Loading data... Please wait 2–3 seconds and try again.";
+if(Object.keys(data).length===0){
+
+document.getElementById("result").innerHTML=
+"⏳ Loading data... Please wait 2–3 seconds and try again.";
+
 return;
+
 }
 
-let id = document.getElementById("idInput").value.trim().toUpperCase();
+let id=document
+.getElementById("idInput")
+.value
+.trim()
+.toUpperCase();
 
-let s = data[id];
+let s=data[id];
 
 if(!s){
-document.getElementById("result").innerHTML =
-`<p class="error">❌ Student not found! Please recheck your BITS ID and Enter.</p> 
-<p>👉 If not found! Contact help desk : 4th Floor,A-WING,Lab 401.</P>`;
+
+document.getElementById("result").innerHTML=`
+
+<p class="error">
+❌ Student not found! Please recheck your BITS ID.
+</p>
+
+<p>
+👉 Contact Help Desk:
+4th Floor, A-WING, Lab 401
+</p>
+
+`;
+
 return;
+
 }
 
-document.getElementById("result").innerHTML = `
+document.getElementById("result").innerHTML=`
 
 <h2>${s.name}</h2>
 
-<p><span class="lebel">System:</span> <span class="value">${s.system}</span></p>
-<p><span class="lebel">Lab:</span> <span class="value">${s.lab}</span></p>
-<p><span class="lebel">Floor:</span> <span class="value">${s.floor}</span></p>
-<p><span class="lebel">Block:</span> <span class="value">${s.block}</span></p>
-<p><span class="lebel">Program:</span> <span class="value">${s.program}</span></p>
-<p><span class="lebel">Sub Program:</span> <span class="value">${s.subprogram}</span></p>
+<p><span class="label">System No:</span> <span class="value">${s.system}</span></p>
+
+<p><span class="label">Floor:</span> <span class="value">${s.floor}</span></p>
+
+<p><span class="label">Block:</span> <span class="value">${s.block}</span></p>
+
+<p><span class="label">Lab:</span> <span class="value">${s.lab}</span></p>
+
+<p><span class="label">Program:</span> <span class="value">${s.program}</span></p>
 
 <div class="highlight">
-📍 Report to <b>${s.floor}</b> Floor, <b>${s.block}</b>, Lab <b>${s.lab}</b>, System <b>${s.system}</b>.
+
+📍 Report to
+<b>${s.floor}</b> Floor,
+<b>${s.block}</b>,
+Lab <b>${s.lab}</b>,
+System <b>${s.system}</b>
+
 </div>
 
-<p>✅MANDATORY :📱 Take a screenshot and show it to the invigilator!</p>
+<p>
+✅ MANDATORY: 📱 Take a screenshot and show it to the invigilator.
+</p>
 
 `;
 
 }
 
-document.getElementById("idInput").addEventListener("keydown", function(e){
-if(e.key === "Enter"){
+document
+.getElementById("idInput")
+.addEventListener("keydown",function(e){
+
+if(e.key==="Enter"){
+
 e.preventDefault();
+
 search();
+
 }
+
 });
 
 </script>
