@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <title>Seating Portal</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,42 +10,45 @@
 
 body{
 font-family:Arial,sans-serif;
-background:linear-gradient(135deg,#020617,#1e3a8a,#0f172a);
+background:#f3f4f6;
 margin:0;
 min-height:100vh;
 display:flex;
 flex-direction:column;
 text-align:center;
-color:white;
 }
 
 /* HEADER */
 
 .header{
-background:linear-gradient(90deg,#020617,#1e3a8a);
-padding:10px 25px 25px;
-box-shadow:0 4px 15px rgba(0,0,0,.5);
+background:#05235c;
+padding:18px 25px 25px;
+box-shadow:0 4px 12px rgba(0,0,0,.25);
+color:white;
 }
 
 .header h2,
 .header h3,
 .header h4{
-margin:4px 0;
+margin:6px 0;
 }
 
 .header h2{
-color:white;
+font-size:34px;
+font-weight:bold;
 }
 
 .header h3{
 color:#facc15;
+font-size:22px;
 }
 
 .header h4{
-color:#86efac;
+font-size:18px;
+font-weight:normal;
 }
 
-/* CONTENT */
+/* MAIN */
 
 .main-content{
 flex:1;
@@ -53,119 +57,168 @@ flex:1;
 /* CARD */
 
 .card{
-background:rgba(255,255,255,.95);
+background:#fafafa;
 color:black;
-padding:20px;
+padding:25px;
 border-radius:15px;
-
 width:90%;
-max-width:420px;
-
-margin:30px auto;
-
-box-shadow:
-0 10px 30px rgba(0,0,0,.4);
+max-width:650px;
+margin:25px auto;
+box-shadow:0 2px 10px rgba(0,0,0,.12);
 }
 
-/* INPUT */
+/* SEARCH */
+
+.search-box{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:12px;
+flex-wrap:wrap;
+margin-top:10px;
+}
 
 input{
 
-width:75%;
-max-width:280px;
+width:65%;
+padding:16px;
 
-padding:12px;
+border-radius:10px;
+border:1px solid #d1d5db;
 
-border-radius:8px;
-border:1px solid #ccc;
+font-size:18px;
+outline:none;
 
 text-transform:uppercase;
 
-outline:none;
 }
-
-/* BUTTON */
 
 button{
 
-padding:12px 20px;
+padding:16px 30px;
 
-margin-top:10px;
-
-background:#22c55e;
-
+background:#032c7a;
 color:white;
 
 border:none;
-
-border-radius:8px;
+border-radius:10px;
 
 cursor:pointer;
+
+font-size:18px;
+font-weight:bold;
+
 }
 
 button:hover{
-background:#16a34a;
+background:#0a3e9f;
 }
 
 /* RESULT */
 
 .result{
 text-align:left;
-margin-top:20px;
+margin-top:25px;
 }
 
 .result h2{
-text-align:center;
+font-size:30px;
+margin-bottom:20px;
 word-break:break-word;
 }
 
-.result p{
-margin:8px 0;
-}
-
-.label{
-color:#2563eb;
-font-weight:600;
-}
-
-.value{
-font-weight:bold;
-color:black;
-}
-
-/* REPORT BOX */
-
-.highlight{
-
-background:#ecfdf5;
-
-padding:12px;
-
-border-radius:10px;
+.info-box{
 
 margin-top:15px;
 
-line-height:1.6;
+border:1px solid #d1d5db;
+border-radius:12px;
+
+padding:15px;
+
+background:white;
+
+line-height:1.9;
+}
+
+.result p{
+margin:10px 0;
+font-size:18px;
+}
+
+.label{
+color:#082f75;
+font-weight:bold;
+}
+
+.value{
+color:black;
+}
+
+/* REPORT */
+
+.highlight{
+
+background:#edf2f7;
+
+border:1px solid #d6dde7;
+
+padding:15px;
+
+border-radius:12px;
+
+margin-top:15px;
+
+line-height:1.8;
+
+font-size:18px;
 }
 
 /* ERROR */
 
 .error{
-color:#ef4444;
+color:red;
 font-weight:bold;
 }
 
 /* FOOTER */
 
 .footer{
-
 margin-top:auto;
-
-padding:10px;
-
+padding:15px;
 font-size:13px;
+color:#6b7280;
+}
 
-color:#cbd5f5;
+/* MOBILE */
+
+@media(max-width:600px){
+
+.header h2{
+font-size:28px;
+}
+
+.header h3{
+font-size:18px;
+}
+
+.header h4{
+font-size:16px;
+}
+
+input{
+width:100%;
+font-size:16px;
+}
+
+button{
+width:100%;
+}
+
+.result h2{
+font-size:22px;
+}
+
 }
 
 </style>
@@ -190,21 +243,20 @@ color:#cbd5f5;
 
 <div class="card">
 
+<div class="search-box">
+
 <input
 id="idInput"
-placeholder="ENTER FULL BITS ID"
+placeholder="ENTER FULL BITS ID (EX:2025BT3...)"
 autofocus>
-
-<br>
 
 <button onclick="search()">
 Search
 </button>
 
-<div
-id="result"
-class="result">
 </div>
+
+<div id="result" class="result"></div>
 
 </div>
 
@@ -212,9 +264,10 @@ class="result">
 
 
 <div class="footer">
-DEVELOPED BY SUDARSAN NB
-</div>
 
+DEVELOPED BY SUDARSAN NB
+
+</div>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -229,8 +282,7 @@ fetch("seating1.xlsx")
 
 .then(fileData=>{
 
-let workbook=
-XLSX.read(fileData);
+let workbook=XLSX.read(fileData);
 
 let sheet=
 workbook.Sheets[
@@ -245,33 +297,25 @@ json.forEach(row=>{
 if(!row["Candidate ID"])
 return;
 
-
 let id=
 row["Candidate ID"]
 .toString()
 .trim()
 .toUpperCase();
 
-
 data[id]={
 
-name:
-row["Candidate Name"],
+name:row["Candidate Name"],
 
-system:
-row["System Number"],
+program:row["Program Name"],
 
-floor:
-row["Floor"],
+floor:row["Floor"],
 
-block:
-row["Block"],
+block:row["Block"],
 
-lab:
-row["Lab"],
+lab:row["Lab"],
 
-program:
-row["Program Name"]
+system:row["System Number"]
 
 };
 
@@ -285,7 +329,7 @@ document.getElementById("result").innerHTML=`
 
 <p class="error">
 
-❌ Error loading Excel file!
+❌ Error loading Excel file
 
 </p>
 
@@ -294,32 +338,44 @@ document.getElementById("result").innerHTML=`
 });
 
 
-
 function search(){
-
 
 if(Object.keys(data).length===0){
 
 document.getElementById("result").innerHTML=
 
-"⏳ Loading data... Please wait 2–3 seconds and try again.";
+"⏳ Loading data...Please wait";
 
 return;
 
 }
 
 
-let id=
-
-document
+let id=document
 .getElementById("idInput")
 .value
 .trim()
 .toUpperCase();
 
 
-let s=data[id];
+if(!id){
 
+document.getElementById("result").innerHTML=`
+
+<p class="error">
+
+❌ Please enter Candidate ID
+
+</p>
+
+`;
+
+return;
+
+}
+
+
+let s=data[id];
 
 if(!s){
 
@@ -333,8 +389,7 @@ document.getElementById("result").innerHTML=`
 
 <p>
 
-👉 Contact Help Desk:
-
+If data not found 👉 Contact Help Desk:
 4th Floor, A-WING, Lab 401
 
 </p>
@@ -349,82 +404,66 @@ return;
 
 document.getElementById("result").innerHTML=`
 
-<h2>${s.name}</h2>
+<h2>${s.name||"-"}</h2>
 
-
-<p>
-<span class="label">
-System No:
-</span>
-
-<span class="value">
-${s.system}
-</span>
-</p>
-
+<div class="info-box">
 
 <p>
-<span class="label">
-Floor:
-</span>
-
-<span class="value">
-${s.floor}
-</span>
+<span class="label">Program:</span>
+<span class="value">${s.program||"-"}</span>
 </p>
-
 
 <p>
-<span class="label">
-Block:
-</span>
-
-<span class="value">
-${s.block}
-</span>
+<span class="label">Floor:</span>
+<span class="value">${s.floor||"-"}</span>
 </p>
-
 
 <p>
-<span class="label">
-Lab:
-</span>
-
-<span class="value">
-${s.lab}
-</span>
+<span class="label">Block:</span>
+<span class="value">${s.block||"-"}</span>
 </p>
-
 
 <p>
-<span class="label">
-Program:
-</span>
-
-<span class="value">
-${s.program}
-</span>
+<span class="label">Lab:</span>
+<span class="value">${s.lab||"-"}</span>
 </p>
 
+<p>
+<span class="label">System No:</span>
+<span class="value">${s.system||"-"}</span>
+</p>
+
+</div>
 
 
 <div class="highlight">
 
 📍 Report to
-<b>${s.floor}</b> Floor,
-<b>${s.block}</b>,
-Lab <b>${s.lab}</b>,
-System <b>${s.system}</b>
+<b>${s.floor||"-"}</b> Floor,
+<b>${s.block||"-"}</b>,
+Lab <b>${s.lab||"-"}</b>,
+System <b>${s.system||"-"}</b>
 
 </div>
 
 
-<p>
+<div class="info-box">
 
-✅ MANDATORY:
-📱 Take a screenshot and show it to invigilator
+✅ <b>Mandatory:</b><br>
 
-</p>
+Take a screenshot and show it to the invigilator.
+
+</div>
+
+
+<div class="info-box">
+
+ℹ️ <b>Note:</b><br>
+
+For any queries please visit
+Room 401, A-Wing, 4th Floor.
+
+</div>
 
 `;
 
@@ -434,9 +473,7 @@ System <b>${s.system}</b>
 
 document
 .getElementById("idInput")
-.addEventListener(
-"keydown",
-function(e){
+.addEventListener("keydown",function(e){
 
 if(e.key==="Enter"){
 
