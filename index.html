@@ -2,6 +2,7 @@
 <html>
 <head>
 <title>Seating Portal</title>
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
@@ -9,15 +10,15 @@
 body{
 font-family:Arial,sans-serif;
 background:linear-gradient(135deg,#020617,#1e3a8a,#0f172a);
-color:white;
-text-align:center;
 margin:0;
 min-height:100vh;
 display:flex;
 flex-direction:column;
+text-align:center;
+color:white;
 }
 
-/* Header */
+/* HEADER */
 
 .header{
 background:linear-gradient(90deg,#020617,#1e3a8a);
@@ -32,7 +33,7 @@ margin:4px 0;
 }
 
 .header h2{
-color:#ffffff;
+color:white;
 }
 
 .header h3{
@@ -43,43 +44,62 @@ color:#facc15;
 color:#86efac;
 }
 
-/* Main content */
+/* CONTENT */
 
 .main-content{
 flex:1;
 }
 
-/* Card */
+/* CARD */
 
 .card{
 background:rgba(255,255,255,.95);
 color:black;
 padding:20px;
 border-radius:15px;
-max-width:420px;
+
 width:90%;
-margin:40px auto;
-box-shadow:0 10px 30px rgba(0,0,0,.4);
+max-width:420px;
+
+margin:30px auto;
+
+box-shadow:
+0 10px 30px rgba(0,0,0,.4);
 }
 
-/* Input */
+/* INPUT */
 
 input{
+
+width:75%;
+max-width:280px;
+
 padding:12px;
-width:70%;
+
 border-radius:8px;
 border:1px solid #ccc;
+
 text-transform:uppercase;
+
+outline:none;
 }
 
-/* Button */
+/* BUTTON */
 
 button{
+
 padding:12px 20px;
+
+margin-top:10px;
+
 background:#22c55e;
+
 color:white;
+
 border:none;
+
 border-radius:8px;
+
 cursor:pointer;
 }
 
@@ -87,15 +107,20 @@ button:hover{
 background:#16a34a;
 }
 
-/* Result */
+/* RESULT */
 
 .result{
 text-align:left;
 margin-top:20px;
 }
 
+.result h2{
+text-align:center;
+word-break:break-word;
+}
+
 .result p{
-margin:6px 0;
+margin:8px 0;
 }
 
 .label{
@@ -108,26 +133,38 @@ font-weight:bold;
 color:black;
 }
 
+/* REPORT BOX */
+
 .highlight{
+
 background:#ecfdf5;
-padding:10px;
-border-radius:8px;
-margin-top:10px;
+
+padding:12px;
+
+border-radius:10px;
+
+margin-top:15px;
+
+line-height:1.6;
 }
 
-/* Error */
+/* ERROR */
 
 .error{
 color:#ef4444;
 font-weight:bold;
 }
 
-/* Footer */
+/* FOOTER */
 
 .footer{
+
 margin-top:auto;
+
 padding:10px;
+
 font-size:13px;
+
 color:#cbd5f5;
 }
 
@@ -139,29 +176,46 @@ color:#cbd5f5;
 <div class="main-content">
 
 <div class="header">
+
 <h2>BITS EXAMINATION</h2>
+
 <h3>CANDIDATE SEATING ARRANGEMENT</h3>
+
 <h4>CENTRE : JAIN UNIVERSITY</h4>
+
 <h4>Date: 23-05-2026 | SHIFT : FN (9:00 AM)</h4>
+
 </div>
+
 
 <div class="card">
 
 <input
 id="idInput"
-placeholder="ENTER FULL BITS ID(Ex:202318BT..)"
+placeholder="ENTER FULL BITS ID"
 autofocus>
 
-<button onclick="search()">Search</button>
+<br>
 
-<div id="result" class="result"></div>
+<button onclick="search()">
+Search
+</button>
+
+<div
+id="result"
+class="result">
+</div>
 
 </div>
+
 </div>
+
 
 <div class="footer">
 DEVELOPED BY SUDARSAN NB
 </div>
+
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
@@ -170,10 +224,13 @@ DEVELOPED BY SUDARSAN NB
 let data={};
 
 fetch("seating1.xlsx")
+
 .then(res=>res.arrayBuffer())
+
 .then(fileData=>{
 
-let workbook=XLSX.read(fileData);
+let workbook=
+XLSX.read(fileData);
 
 let sheet=
 workbook.Sheets[
@@ -185,21 +242,36 @@ XLSX.utils.sheet_to_json(sheet);
 
 json.forEach(row=>{
 
-if(!row["Candidate ID"]) return;
+if(!row["Candidate ID"])
+return;
 
-let id=row["Candidate ID"]
+
+let id=
+row["Candidate ID"]
 .toString()
 .trim()
 .toUpperCase();
 
+
 data[id]={
 
-name:row["Candidate Name"],
-system:row["System Number"],
-floor:row["Floor"],
-block:row["Block"],
-lab:row["Lab"],
-program:row["Program Name"]
+name:
+row["Candidate Name"],
+
+system:
+row["System Number"],
+
+floor:
+row["Floor"],
+
+block:
+row["Block"],
+
+lab:
+row["Lab"],
+
+program:
+row["Program Name"]
 
 };
 
@@ -209,41 +281,62 @@ program:row["Program Name"]
 
 .catch(()=>{
 
-document.getElementById("result").innerHTML=
-`<p class="error">❌ Error loading Excel file!</p>`;
+document.getElementById("result").innerHTML=`
+
+<p class="error">
+
+❌ Error loading Excel file!
+
+</p>
+
+`;
 
 });
 
+
+
 function search(){
+
 
 if(Object.keys(data).length===0){
 
 document.getElementById("result").innerHTML=
+
 "⏳ Loading data... Please wait 2–3 seconds and try again.";
 
 return;
 
 }
 
-let id=document
+
+let id=
+
+document
 .getElementById("idInput")
 .value
 .trim()
 .toUpperCase();
 
+
 let s=data[id];
+
 
 if(!s){
 
 document.getElementById("result").innerHTML=`
 
 <p class="error">
+
 ❌ Student not found! Please recheck your BITS ID.
+
 </p>
 
 <p>
-✖️If details not found!👉 Contact Help Desk:
+
+👉 Contact Help Desk:
+
 4th Floor, A-WING, Lab 401
+
 </p>
 
 `;
@@ -252,19 +345,68 @@ return;
 
 }
 
+
+
 document.getElementById("result").innerHTML=`
 
 <h2>${s.name}</h2>
 
-<p><span class="label">System No:</span> <span class="value">${s.system}</span></p>
 
-<p><span class="label">Floor:</span> <span class="value">${s.floor}</span></p>
+<p>
+<span class="label">
+System No:
+</span>
 
-<p><span class="label">Block:</span> <span class="value">${s.block}</span></p>
+<span class="value">
+${s.system}
+</span>
+</p>
 
-<p><span class="label">Lab:</span> <span class="value">${s.lab}</span></p>
 
-<p><span class="label">Program:</span> <span class="value">${s.program}</span></p>
+<p>
+<span class="label">
+Floor:
+</span>
+
+<span class="value">
+${s.floor}
+</span>
+</p>
+
+
+<p>
+<span class="label">
+Block:
+</span>
+
+<span class="value">
+${s.block}
+</span>
+</p>
+
+
+<p>
+<span class="label">
+Lab:
+</span>
+
+<span class="value">
+${s.lab}
+</span>
+</p>
+
+
+<p>
+<span class="label">
+Program:
+</span>
+
+<span class="value">
+${s.program}
+</span>
+</p>
+
+
 
 <div class="highlight">
 
@@ -276,17 +418,25 @@ System <b>${s.system}</b>
 
 </div>
 
+
 <p>
-✅ MANDATORY: 📱 Take a screenshot and show it to the invigilator.
+
+✅ MANDATORY:
+📱 Take a screenshot and show it to invigilator
+
 </p>
 
 `;
 
 }
 
+
+
 document
 .getElementById("idInput")
-.addEventListener("keydown",function(e){
+.addEventListener(
+"keydown",
+function(e){
 
 if(e.key==="Enter"){
 
