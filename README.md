@@ -1,2 +1,2 @@
-# bits-examination.github.io
+# sudarsannb.github.io
 "Welcome to my website : a responsive page."
