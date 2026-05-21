@@ -22,7 +22,7 @@ text-align:center;
 
 .header{
 background:#05235c;
-padding:18px 25px 25px;
+padding:14px 20px 18px;
 box-shadow:0 4px 12px rgba(0,0,0,.25);
 color:white;
 }
@@ -30,21 +30,21 @@ color:white;
 .header h2,
 .header h3,
 .header h4{
-margin:6px 0;
+margin:4px 0;
 }
 
 .header h2{
-font-size:34px;
+font-size:18px;
 font-weight:bold;
 }
 
 .header h3{
 color:#facc15;
-font-size:22px;
+font-size:14px;
 }
 
 .header h4{
-font-size:18px;
+font-size:12px;
 font-weight:normal;
 }
 
@@ -59,11 +59,11 @@ flex:1;
 .card{
 background:#fafafa;
 color:black;
-padding:25px;
+padding:18px;
 border-radius:15px;
-width:90%;
-max-width:650px;
-margin:25px auto;
+width:92%;
+max-width:430px;
+margin:18px auto;
 box-shadow:0 2px 10px rgba(0,0,0,.12);
 }
 
@@ -73,20 +73,20 @@ box-shadow:0 2px 10px rgba(0,0,0,.12);
 display:flex;
 justify-content:center;
 align-items:center;
-gap:12px;
+gap:10px;
 flex-wrap:wrap;
-margin-top:10px;
+margin-top:5px;
 }
 
 input{
 
-width:65%;
-padding:16px;
+width:68%;
+padding:12px;
 
-border-radius:10px;
+border-radius:8px;
 border:1px solid #d1d5db;
 
-font-size:18px;
+font-size:14px;
 outline:none;
 
 text-transform:uppercase;
@@ -95,17 +95,17 @@ text-transform:uppercase;
 
 button{
 
-padding:16px 30px;
+padding:12px 20px;
 
 background:#032c7a;
 color:white;
 
 border:none;
-border-radius:10px;
+border-radius:8px;
 
 cursor:pointer;
 
-font-size:18px;
+font-size:14px;
 font-weight:bold;
 
 }
@@ -118,32 +118,18 @@ background:#0a3e9f;
 
 .result{
 text-align:left;
-margin-top:25px;
+margin-top:18px;
 }
 
 .result h2{
-font-size:30px;
-margin-bottom:20px;
+font-size:20px;
+margin-bottom:15px;
 word-break:break-word;
 }
 
-.info-box{
-
-margin-top:15px;
-
-border:1px solid #d1d5db;
-border-radius:12px;
-
-padding:15px;
-
-background:white;
-
-line-height:1.9;
-}
-
 .result p{
-margin:10px 0;
-font-size:18px;
+margin:7px 0;
+font-size:14px;
 }
 
 .label{
@@ -155,23 +141,31 @@ font-weight:bold;
 color:black;
 }
 
+.info-box{
+margin-top:12px;
+border:1px solid #d1d5db;
+border-radius:12px;
+padding:12px;
+background:white;
+line-height:1.5;
+}
+
 /* REPORT */
 
 .highlight{
 
 background:#edf2f7;
-
 border:1px solid #d6dde7;
 
-padding:15px;
+padding:12px;
 
 border-radius:12px;
 
-margin-top:15px;
+margin-top:12px;
 
-line-height:1.8;
+line-height:1.5;
 
-font-size:18px;
+font-size:14px;
 }
 
 /* ERROR */
@@ -185,8 +179,8 @@ font-weight:bold;
 
 .footer{
 margin-top:auto;
-padding:15px;
-font-size:13px;
+padding:10px;
+font-size:12px;
 color:#6b7280;
 }
 
@@ -194,29 +188,19 @@ color:#6b7280;
 
 @media(max-width:600px){
 
-.header h2{
-font-size:28px;
-}
-
-.header h3{
-font-size:18px;
-}
-
-.header h4{
-font-size:16px;
-}
-
 input{
-width:100%;
-font-size:16px;
+width:60%;
+font-size:14px;
 }
 
 button{
-width:100%;
+width:auto;
+font-size:14px;
+padding:12px 18px;
 }
 
 .result h2{
-font-size:22px;
+font-size:18px;
 }
 
 }
@@ -328,9 +312,7 @@ system:row["System Number"]
 document.getElementById("result").innerHTML=`
 
 <p class="error">
-
 ❌ Error loading Excel file
-
 </p>
 
 `;
@@ -343,13 +325,11 @@ function search(){
 if(Object.keys(data).length===0){
 
 document.getElementById("result").innerHTML=
-
-"⏳ Loading data...Please wait";
+"⏳ Loading data... Please wait";
 
 return;
 
 }
-
 
 let id=document
 .getElementById("idInput")
@@ -363,9 +343,7 @@ if(!id){
 document.getElementById("result").innerHTML=`
 
 <p class="error">
-
 ❌ Please enter Candidate ID
-
 </p>
 
 `;
@@ -382,16 +360,12 @@ if(!s){
 document.getElementById("result").innerHTML=`
 
 <p class="error">
-
 ❌ Student not found! Please recheck your BITS ID.
-
 </p>
 
 <p>
-
-If data not found 👉 Contact Help Desk:
+👉 Contact Help Desk:
 4th Floor, A-WING, Lab 401
-
 </p>
 
 `;
@@ -401,40 +375,28 @@ return;
 }
 
 
-
 document.getElementById("result").innerHTML=`
 
 <h2>${s.name||"-"}</h2>
 
 <div class="info-box">
 
-<p>
-<span class="label">Program:</span>
-<span class="value">${s.program||"-"}</span>
-</p>
+<p><span class="label">Program:</span>
+<span class="value">${s.program||"-"}</span></p>
 
-<p>
-<span class="label">Floor:</span>
-<span class="value">${s.floor||"-"}</span>
-</p>
+<p><span class="label">Floor:</span>
+<span class="value">${s.floor||"-"}</span></p>
 
-<p>
-<span class="label">Block:</span>
-<span class="value">${s.block||"-"}</span>
-</p>
+<p><span class="label">Block:</span>
+<span class="value">${s.block||"-"}</span></p>
 
-<p>
-<span class="label">Lab:</span>
-<span class="value">${s.lab||"-"}</span>
-</p>
+<p><span class="label">Lab:</span>
+<span class="value">${s.lab||"-"}</span></p>
 
-<p>
-<span class="label">System No:</span>
-<span class="value">${s.system||"-"}</span>
-</p>
+<p><span class="label">System No:</span>
+<span class="value">${s.system||"-"}</span></p>
 
 </div>
-
 
 <div class="highlight">
 
@@ -446,30 +408,23 @@ System <b>${s.system||"-"}</b>
 
 </div>
 
-
 <div class="info-box">
 
 ✅ <b>Mandatory:</b><br>
-
 Take a screenshot and show it to the invigilator.
 
 </div>
 
-
 <div class="info-box">
 
 ℹ️ <b>Note:</b><br>
-
-For any queries please visit
-Room 401, A-Wing, 4th Floor.
+For any queries please visit Room 401, A-Wing, 4th Floor.
 
 </div>
 
 `;
 
 }
-
-
 
 document
 .getElementById("idInput")
