@@ -278,12 +278,12 @@ json.forEach(row=>{
 if(!row["Candidate ID"])
 return;
 
-let id=
+let id =
 row["Candidate ID"]
 .toString()
-.trim()
+.replace(/\s+/g,"")
 .toUpperCase();
-
+  
 data[id]={
 
 name:row["Candidate Name"],
