@@ -65,6 +65,36 @@ width:92%;
 max-width:430px;
 margin:18px auto;
 box-shadow:0 2px 10px rgba(0,0,0,.12);
+box-sizing:border-box;
+}
+
+/* SHIFT */
+
+.shift-title{
+font-size:15px;
+font-weight:bold;
+margin-bottom:10px;
+color:#082f75;
+}
+
+.shift-box{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:8px;
+flex-wrap:wrap;
+margin-bottom:14px;
+}
+
+.shift-box select{
+padding:11px;
+border-radius:8px;
+border:1px solid #d1d5db;
+font-size:14px;
+background:white;
+cursor:pointer;
+min-width:180px;
+outline:none;
 }
 
 /* SEARCH */
@@ -79,39 +109,34 @@ margin-top:5px;
 }
 
 input{
-
 width:68%;
 padding:12px;
-
 border-radius:8px;
 border:1px solid #d1d5db;
-
 font-size:14px;
 outline:none;
-
 text-transform:uppercase;
-
+box-sizing:border-box;
 }
 
 button{
-
 padding:12px 20px;
-
 background:#032c7a;
 color:white;
-
 border:none;
 border-radius:8px;
-
 cursor:pointer;
-
 font-size:14px;
 font-weight:bold;
-
 }
 
 button:hover{
 background:#0a3e9f;
+}
+
+button:disabled{
+background:#9ca3af;
+cursor:not-allowed;
 }
 
 /* RESULT */
@@ -123,6 +148,7 @@ margin-top:18px;
 
 .result h2{
 font-size:20px;
+text-align:center;
 margin-bottom:15px;
 word-break:break-word;
 }
@@ -140,6 +166,8 @@ font-weight:bold;
 .value{
 color:black;
 }
+
+/* INFO BOX */
 
 .info-box{
 margin-top:10px;
@@ -160,15 +188,21 @@ padding:11px;
 border-radius:10px;
 margin-top:10px;
 line-height:1.4;
-
-font-size:14px;     /* increase text size */
-font-weight:600;    /* slightly bold */
+font-size:14px;
+font-weight:600;
 }
 
 /* ERROR */
 
 .error{
 color:red;
+font-weight:bold;
+}
+
+/* LOADING */
+
+.loading{
+color:#082f75;
 font-weight:bold;
 }
 
@@ -200,6 +234,11 @@ padding:12px 18px;
 font-size:18px;
 }
 
+.shift-box select{
+width:100%;
+max-width:250px;
+}
+
 }
 
 </style>
@@ -215,27 +254,67 @@ font-size:18px;
 
 <h3>CANDIDATE SEATING ARRANGEMENT</h3>
 
-<h4>CENTRE : JAIN UNIVERSITY </h4>
+<h4>CENTRE : JYOTI NIVAS COLLEGE</h4>
 
-<h4>🗓️Date: 20-09-2026 |🕘<B>Shift : EN (4:30 PM)</B></h4>
+<h4>🗓️ Date: 26-06-2026 | 🕘 Shift : Select Below</h4>
 
 </div>
 
 
 <div class="card">
 
+<!-- SHIFT SELECTION -->
+
+<div class="shift-title">
+SELECT YOUR SHIFT
+</div>
+
+<div class="shift-box">
+
+<select id="shiftSelect">
+
+<option value="">
+-- Select Your Shift --
+</option>
+
+<option value="seating1.xlsx">
+1st SHIFT 9:00 AM
+</option>
+
+<option value="seating2.xlsx">
+2nd SHIFT 1:00 PM
+</option>
+
+<option value="seating3.xlsx">
+3rd SHIFT 4:30 PM
+</option>
+
+</select>
+
+</div>
+
+
+<!-- SEARCH AREA -->
+
 <div class="search-box">
 
 <input
 id="idInput"
 placeholder="ENTER BITS ID (EX:2024BT78)"
-autofocus>
+autofocus
+disabled>
 
-<button onclick="search()">
+<button
+id="searchButton"
+onclick="search()"
+disabled>
+
 Search
+
 </button>
 
 </div>
+
 
 <div id="result" class="result"></div>
 
@@ -251,96 +330,252 @@ DEVELOPED BY SUDARSAN NB
 </div>
 
 
+<!-- XLSX LIBRARY -->
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
 
 <script>
 
-let data={};
+let data = {};
 
-fetch("seating1.xlsx")
+let selectedFile = "";
 
-.then(res=>res.arrayBuffer())
+let dataLoaded = false;
 
-.then(fileData=>{
 
-let workbook=XLSX.read(fileData);
+/* ELEMENTS */
 
-let sheet=
+const shiftSelect =
+document.getElementById("shiftSelect");
+
+const idInput =
+document.getElementById("idInput");
+
+const searchButton =
+document.getElementById("searchButton");
+
+const result =
+document.getElementById("result");
+
+
+/* SHIFT SELECTION */
+
+shiftSelect.addEventListener("change", function(){
+
+selectedFile = this.value;
+
+data = {};
+
+dataLoaded = false;
+
+idInput.value = "";
+
+result.innerHTML = "";
+
+
+/* NO SHIFT SELECTED */
+
+if(!selectedFile){
+
+idInput.disabled = true;
+
+searchButton.disabled = true;
+
+return;
+
+}
+
+
+/* SHIFT SELECTED */
+
+idInput.disabled = true;
+
+searchButton.disabled = true;
+
+result.innerHTML = `
+
+<p class="loading">
+⏳ Loading seating data...
+</p>
+
+`;
+
+
+/* LOAD SELECTED EXCEL */
+
+fetch(selectedFile)
+
+.then(response => {
+
+if(!response.ok){
+
+throw new Error("Excel file not found");
+
+}
+
+return response.arrayBuffer();
+
+})
+
+.then(fileData => {
+
+let workbook =
+XLSX.read(fileData, {
+type:"array"
+});
+
+
+if(!workbook.SheetNames.length){
+
+throw new Error("No worksheet found");
+
+}
+
+
+let sheet =
 workbook.Sheets[
 workbook.SheetNames[0]
 ];
 
-let json=
+
+let json =
 XLSX.utils.sheet_to_json(sheet);
 
-json.forEach(row=>{
+
+if(json.length === 0){
+
+throw new Error("Excel file is empty");
+
+}
+
+
+/* CLEAR PREVIOUS DATA */
+
+data = {};
+
+
+/* READ EXCEL DATA */
+
+json.forEach(row => {
 
 if(!row["Candidate ID"])
 return;
 
+
 let id =
 row["Candidate ID"]
 .toString()
-.replace(/\s+/g,"")
+.trim()
 .toUpperCase();
-  
-data[id]={
 
-name:row["Candidate Name"],
 
-program:row["Program Name"],
+data[id] = {
 
-floor:row["Floor"],
+name: row["Candidate Name"],
 
-block:row["Block"],
+program: row["Program Name"],
 
-lab:row["Lab"],
+floor: row["Floor"],
 
-system:row["System Number"]
+block: row["Block"],
+
+lab: row["Lab"],
+
+system: row["System Number"]
 
 };
 
 });
 
-})
 
-.catch(()=>{
+/* CHECK WHETHER DATA WAS LOADED */
 
-document.getElementById("result").innerHTML=`
+if(Object.keys(data).length === 0){
 
-<p class="error">
-❌ Error loading Excel file
+throw new Error("No Candidate ID found");
+
+}
+
+
+dataLoaded = true;
+
+idInput.disabled = false;
+
+searchButton.disabled = false;
+
+result.innerHTML = `
+
+<p class="loading">
+✅ ${getShiftName(selectedFile)} selected. Enter your BITS ID.
 </p>
 
 `;
+
+idInput.focus();
+
+})
+
+.catch(error => {
+
+data = {};
+
+dataLoaded = false;
+
+idInput.disabled = true;
+
+searchButton.disabled = true;
+
+result.innerHTML = `
+
+<p class="error">
+❌ Unable to load ${getShiftName(selectedFile)} data.
+</p>
+
+<p>
+Please contact the Help Desk.
+</p>
+
+`;
+
+console.error(error);
+
+});
 
 });
 
 
-function search(){
+/* SHIFT NAME */
 
-if(Object.keys(data).length===0){
+function getShiftName(file){
 
-document.getElementById("result").innerHTML=
-"⏳ Loading data... Please wait";
+if(file === "seating1.xlsx")
+return "1st SHIFT";
 
-return;
+if(file === "seating2.xlsx")
+return "2nd SHIFT";
+
+if(file === "seating3.xlsx")
+return "3rd SHIFT";
+
+return "selected shift";
 
 }
 
-let id=document
-.getElementById("idInput")
-.value
-.trim()
-.toUpperCase();
+
+/* SEARCH */
+
+function search(){
 
 
-if(!id){
+/* SHIFT CHECK */
 
-document.getElementById("result").innerHTML=`
+if(!selectedFile){
+
+result.innerHTML = `
 
 <p class="error">
-❌ Please enter Candidate ID
+⚠️ Please select your shift first.
 </p>
 
 `;
@@ -350,11 +585,60 @@ return;
 }
 
 
-let s=data[id];
+/* DATA CHECK */
+
+if(!dataLoaded){
+
+result.innerHTML = `
+
+<p class="loading">
+⏳ Seating data is still loading. Please wait.
+</p>
+
+`;
+
+return;
+
+}
+
+
+/* GET ID */
+
+let id =
+idInput.value
+.trim()
+.toUpperCase();
+
+
+/* EMPTY ID */
+
+if(!id){
+
+result.innerHTML = `
+
+<p class="error">
+❌ Please enter Candidate ID.
+</p>
+
+`;
+
+idInput.focus();
+
+return;
+
+}
+
+
+/* FIND STUDENT */
+
+let s = data[id];
+
+
+/* STUDENT NOT FOUND */
 
 if(!s){
 
-document.getElementById("result").innerHTML=`
+result.innerHTML = `
 
 <p class="error">
 ❌ Student not found! Please recheck your BITS ID.
@@ -362,7 +646,7 @@ document.getElementById("result").innerHTML=`
 
 <p>
 If data not found 👉 Contact Help Desk:
-B-WING, 4TH floor, Lab 424
+Degree Block, 1st floor, Lab Computer Lab-1
 </p>
 
 `;
@@ -372,50 +656,73 @@ return;
 }
 
 
-document.getElementById("result").innerHTML=`
+/* DISPLAY RESULT */
 
-<h2>${s.name||"-"}</h2>
+result.innerHTML = `
+
+<h2>${s.name || "-"}</h2>
+
 
 <div class="info-box">
 
-<p><span class="label">📖 Program:</span>
-<span class="value">${s.program||"-"}</span></p>
+<p>
+<span class="label">📖 Program:</span>
+<span class="value">${s.program || "-"}</span>
+</p>
 
-<p><span class="label">🏢 Floor:</span>
-<span class="value">${s.floor||"-"}</span></p>
 
-<p><span class="label">🏣 Block:</span>
-<span class="value">${s.block||"-"}</span></p>
+<p>
+<span class="label">🏢 Floor:</span>
+<span class="value">${s.floor || "-"}</span>
+</p>
 
-<p><span class="label">🪟 Lab:</span>
-<span class="value">${s.lab||"-"}</span></p>
 
-<p><span class="label">🖥️ System No:</span>
-<span class="value">${s.system||"-"}</span></p>
+<p>
+<span class="label">🏣 Block:</span>
+<span class="value">${s.block || "-"}</span>
+</p>
+
+
+<p>
+<span class="label">🪟 Lab:</span>
+<span class="value">${s.lab || "-"}</span>
+</p>
+
+
+<p>
+<span class="label">🖥️ System No:</span>
+<span class="value">${s.system || "-"}</span>
+</p>
 
 </div>
+
 
 <div class="highlight">
 
 📍 Report to
-<b>${s.floor||"-"}</b> Floor,
-<b>${s.block||"-"}</b>,
-Lab <b>${s.lab||"-"}</b>,
-System <b>${s.system||"-"}</b>
+<b>${s.floor || "-"}</b> Floor,
+<b>${s.block || "-"}</b>,
+Lab <b>${s.lab || "-"}</b>,
+System <b>${s.system || "-"}</b>
 
 </div>
+
 
 <div class="info-box">
 
 ✅ <b>Mandatory:</b><br>
-Take a screenshot and show it to the invigilator!
+
+Check the Block name before going & Take a screenshot and show it to the invigilator!
 
 </div>
+
 
 <div class="info-box">
 
 ℹ️ <b>Note:</b><br>
-<B>Your details will be changing for every shift.Do not use same screenshot for another shift!</B>
+
+For any queries please visit
+Computer Lab-1, 1st Floor, Degree Block.
 
 </div>
 
@@ -423,11 +730,14 @@ Take a screenshot and show it to the invigilator!
 
 }
 
-document
-.getElementById("idInput")
-.addEventListener("keydown",function(e){
 
-if(e.key==="Enter"){
+/* ENTER KEY */
+
+idInput.addEventListener(
+"keydown",
+function(e){
+
+if(e.key === "Enter"){
 
 e.preventDefault();
 
@@ -436,6 +746,7 @@ search();
 }
 
 });
+
 
 </script>
 
